@@ -29,6 +29,83 @@ curl -k --request GET --url "<ACUNETIX_SERVER_URL>/api/v1/scans" --header "X-Aut
 #### Implementing the Acunetix JSON Parser in DefectDojo 
 
 1) Log onto DefectDojo server.
-2) cd 'DefectDojo' repo.
-3) cd dojo/tools
-4) copy 'acunetix' parser folder downloaded from this repo into 'dojo/tools' directory.
+2) git clone repo.
+```
+cd /tmp
+git clone https://github.com/code4innerpeace/DefectDojoAcunetixParsers.git
+```
+2) cd 'DefectDojo' repo and copy 'acunetix' folder 'tools' directory.
+```
+cd DefectDojoAcunetixParsers/DefectDojoAcunetixJsonParser/
+cp -r acunetix <DefectDojoRepo>/django-DefectDojo/dojo/tools/
+```
+3) Update [factory.py](https://github.com/DefectDojo/djangoDefectDojo/blob/master/dojo/tools/factory.py "factory.py") file.
+
+```
+cp factory.py factory.py.org
+
+### Add below lines to the 'factory.py' file.
+# Below line above __author__ = 'Jay Paz'
+from dojo.tools.acunetix.parser import AcunetixScannerParser
+
+# Below above else:
+elif scan_type == 'Acunetix Scan':
+        parser = AcunetixScannerParser(file, test)
+```
+4) Add 'Acunetix' scanner to 'SCAN_TYPE_CHOICES' variable in Update [forms.py](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/forms.py#L251 "forms.py") file. <span style="color:red">*The value being added to 'SCAN_TYPE_CHOICES' variable, should match 'scan_type' in step 3.*</span>
+```
+cp <DefectDojoRepo>/django-DefectDojo/dojo/forms.py <DefectDojoRepo>/django-DefectDojo/dojo/forms.py.org
+
+# Add below line to 'SCAN_TYPE_CHOICES' variable. Also make there is ','. All scanners are separated by a ','.
+("Acunetix Scan", "Acunetix Scan")
+```
+
+5) Add the new scanner to the [Template](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/templates/dojo/import_scan_results.html#L27 "import_scan_results.html").
+
+```
+cd <DefectDojoRepo>/django-DefectDojo/dojo/templates/dojo
+cp import_scan_results.html import_scan_results.html.org
+
+# Add below line in 'Unordered List' block after line 28.
+<li><b>Acunetix Scanner</b> - JSON format.</li>
+```
+
+6) Add the new importer to the [test type]https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
+
+```
+cd <DefectDojoRepo>/django-DefectDojo/dojo/fixtures
+cp test_type.json test_type.json.org
+
+# Add below lines to the JSON array. 
+{
+    "fields": {
+      "name": "Acunetix Scan"
+    },
+    "model": "dojo.test_type",
+    "pk": 33
+  }
+```
+#### Known Issues
+
+<b>Issue 1:- If you get below exception. Make sure 'Admin' User profile info is update with email id and other details.</b>
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/defectdojo/django-DefectDojo/dojo/engagement/views.py", line 541, in import_scan_results
+    item.save(dedupe_option=False)
+  File "/defectdojo/django-DefectDojo/dojo/models.py", line 1213, in save
+    if self.reporter.usercontactinfo.block_execution:
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 239, in inner
+    return func(self._wrapped, *args)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 407, in __get__
+    self.related.get_accessor_name()
+RelatedObjectDoesNotExist: User has no usercontactinfo.
