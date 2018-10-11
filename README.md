@@ -39,7 +39,7 @@ git clone https://github.com/code4innerpeace/DefectDojoAcunetixParsers.git
 cd DefectDojoAcunetixParsers/DefectDojoAcunetixJsonParser/
 cp -r acunetix <DefectDojoRepo>/django-DefectDojo/dojo/tools/
 ```
-4) Update [factory.py](https://github.com/DefectDojo/djangoDefectDojo/blob/master/dojo/tools/factory.py "factory.py") file.
+4) Update [factory.py](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/tools/factory.py "factory.py") file.
 
 ```
 cp factory.py factory.py.org
