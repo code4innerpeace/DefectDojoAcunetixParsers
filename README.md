@@ -2,7 +2,7 @@
 
 [DefectDojo](https://github.com/DefectDojo "Github Repo") is an open source vulnerability management tool. DefectDojo has parsers utility which allows importing vulnerabilities scan XML or JSON report into 'DefectDojo'. Currently supported 'Parsers' can be found at this link <https://github.com/DefectDojo/django-DefectDojo/tree/master/dojo/tools>.
 
-As of today 'DefectDojo' doesn't have the parser to import utility from 'Acunetix'. So I had written 'Parser' to import 'Acunetix' scan vulnerability output into 'DefectDojo'. Acunetix vulnerability scanner doesn't allow to export vulnerabilities list in 'JSON' format, so I had written a utility 'acunetix_json_report_generator' to generate scan vulnerabilities details in JSON format. <span style="color:red">*Since Acunetix officially doesn't provide JSON output, I can't push my Acunetix parser to 'DefectDojo' official repo. So I am sharing the code in my repo.*</span>
+Acunetix is one of the leading 'Web Vulnerability Scanner' but as of today 'DefectDojo' doesn't have the parser to import utility from Acunetix. Also currently Acunetix vulnerability scanner doesn't allow to export vulnerabilities list in JSON format, so I had written a utility 'acunetix_json_report_generator.py' to generate scan vulnerabilities details in JSON format and DefectDojo parser to import the Acunetix JSON report into DefectDojo.<span style="color:red">*Since Acunetix officially doesn't provide JSON output, I can't push my Acunetix parser to 'DefectDojo' official repo. So I am sharing the code in my repo.*</span>
 
 ## Steps to import Acunetix Scan Vulnerabilities into DefectDojo
 
@@ -26,7 +26,7 @@ python acunetix_json_report_generator.py -U <ACUNETIX_SERVER_URL> -A <ACUNETIX_A
 curl -k --request GET --url "<ACUNETIX_SERVER_URL>/api/v1/scans" --header "X-Auth: <ACUNETIX_API_TOKEN>" --header "Content-type: application/json" | jq .scans[].scan_id
 ```
 
-#### Implementing the Acunetix JSON Parser in DefectDojo
+#### Implement the Acunetix JSON Parser in DefectDojo
 
 1) Log onto DefectDojo server.
 2) git clone repo.
@@ -34,12 +34,12 @@ curl -k --request GET --url "<ACUNETIX_SERVER_URL>/api/v1/scans" --header "X-Aut
 cd /tmp
 git clone https://github.com/code4innerpeace/DefectDojoAcunetixParsers.git
 ```
-2) cd 'DefectDojo' repo and copy 'acunetix' folder 'tools' directory.
+3) cd 'DefectDojo' repo and copy 'acunetix' folder 'tools' directory.
 ```
 cd DefectDojoAcunetixParsers/DefectDojoAcunetixJsonParser/
 cp -r acunetix <DefectDojoRepo>/django-DefectDojo/dojo/tools/
 ```
-3) Update [factory.py](https://github.com/DefectDojo/djangoDefectDojo/blob/master/dojo/tools/factory.py "factory.py") file.
+4) Update [factory.py](https://github.com/DefectDojo/djangoDefectDojo/blob/master/dojo/tools/factory.py "factory.py") file.
 
 ```
 cp factory.py factory.py.org
@@ -52,7 +52,7 @@ from dojo.tools.acunetix.parser import AcunetixScannerParser
 elif scan_type == 'Acunetix Scan':
         parser = AcunetixScannerParser(file, test)
 ```
-4) Add 'Acunetix' scanner to 'SCAN_TYPE_CHOICES' variable in Update [forms.py](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/forms.py#L251 "forms.py") file. <span style="color:red">*The value being added to 'SCAN_TYPE_CHOICES' variable, should match 'scan_type' in step 3.*</span>
+5) Add 'Acunetix' scanner to 'SCAN_TYPE_CHOICES' variable in Update [forms.py](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/forms.py#L251 "forms.py") file. <span style="color:red">*The value being added to 'SCAN_TYPE_CHOICES' variable, should match 'scan_type' in step 3.*</span>
 ```
 cp <DefectDojoRepo>/django-DefectDojo/dojo/forms.py <DefectDojoRepo>/django-DefectDojo/dojo/forms.py.org
 
@@ -60,7 +60,7 @@ cp <DefectDojoRepo>/django-DefectDojo/dojo/forms.py <DefectDojoRepo>/django-Defe
 ("Acunetix Scan", "Acunetix Scan")
 ```
 
-5) Add the new scanner to the [Template](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/templates/dojo/import_scan_results.html#L27 "import_scan_results.html").
+6) Add the new scanner to the [Template](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/templates/dojo/import_scan_results.html#L27 "import_scan_results.html").
 
 ```
 cd <DefectDojoRepo>/django-DefectDojo/dojo/templates/dojo
@@ -70,7 +70,7 @@ cp import_scan_results.html import_scan_results.html.org
 <li><b>Acunetix Scanner</b> - JSON format.</li>
 ```
 
-6) Add the new importer to the [test type]https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
+7) Add the new importer to the [test type]https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
 
 ```
 cd <DefectDojoRepo>/django-DefectDojo/dojo/fixtures
@@ -85,6 +85,10 @@ cp test_type.json test_type.json.org
     "pk": 33
   }
 ```
+#### Testing
+
+I was able to import Acunetix JSON report with appx 400 vulnerabilities without any issue into DefectDojo.
+
 #### Known Issues
 
 <b>Issue 1:- If you get below exception. Make sure 'Admin' User profile info is update with email id and other details.</b>
