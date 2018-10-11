@@ -70,7 +70,7 @@ cp import_scan_results.html import_scan_results.html.org
 <li><b>Acunetix Scanner</b> - JSON format.</li>
 ```
 
-7) Add the new importer to the [test type]https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
+7) Add the new importer to the [test type](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
 
 ```
 cd <DefectDojoRepo>/django-DefectDojo/dojo/fixtures
