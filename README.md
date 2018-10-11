@@ -2,7 +2,7 @@
 
 [DefectDojo](https://github.com/DefectDojo "Github Repo") is an open source vulnerability management tool. DefectDojo has parsers utility which allows importing vulnerabilities scan XML or JSON report into 'DefectDojo'. Currently supported 'Parsers' can be found at this link <https://github.com/DefectDojo/django-DefectDojo/tree/master/dojo/tools>.
 
-As of today 'DefectDojo' doesn't have the parser to import utility from 'Acunetix'. So I had written 'Parser' to import 'Acunetix' scan vulnerability output into 'DefectDojo'. Acunetix currently doesn't provide 'JSON' output, I had written a utility 'acunetix_json_report_generator' to generate scan vulnerability in JSON format. <span style="color:red">*Since Acunetix officially doesn't provide JSON output, I can't push my Acunetix parser to 'DefectDojo' official repo. So I am sharing the code in my repo.*</span>
+As of today 'DefectDojo' doesn't have the parser to import utility from 'Acunetix'. So I had written 'Parser' to import 'Acunetix' scan vulnerability output into 'DefectDojo'. Acunetix vulnerability scanner doesn't allow to export vulnerabilities list in 'JSON' format, so I had written a utility 'acunetix_json_report_generator' to generate scan vulnerabilities details in JSON format. <span style="color:red">*Since Acunetix officially doesn't provide JSON output, I can't push my Acunetix parser to 'DefectDojo' official repo. So I am sharing the code in my repo.*</span>
 
 ## Steps to import Acunetix Scan Vulnerabilities into DefectDojo
 
