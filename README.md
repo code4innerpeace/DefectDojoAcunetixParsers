@@ -8,8 +8,8 @@ As of today 'DefectDojo' doesn't have the parser to import utility from 'Acuneti
 
 #### Create Acunetix JSON Report
 
-1) git pull <repo>
-2) cd AcunetixJsonReportGenerator
+1) git pull <https://github.com/code4innerpeace/DefectDojoAcunetixParsers>
+2) cd DefectDojoAcunetixParsers/AcunetixJsonReportGenerator
 3) ```python acunetix_json_report_generator.py -h```
 4) Creating the report
 ```
