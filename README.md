@@ -4,6 +4,12 @@
 
 Acunetix is one of the leading 'Web Vulnerability Scanner' but as of today 'DefectDojo' doesn't have the parser to import vulnerability report from Acunetix. Also currently Acunetix vulnerability scanner doesn't allow to export vulnerabilities list in JSON format. Python script [acunetix_json_report_generator.py](https://github.com/code4innerpeace/DefectDojoAcunetixParsers/blob/master/AcunetixJsonReportGenerator/acunetix_json_report_generator.py "acunetix_json_report_generator.py") dumps scan vulnerabilities details into JSON file and DefectDojo [parser](https://github.com/code4innerpeace/DefectDojoAcunetixParsers/blob/master/DefectDojoAcunetixJsonParser/acunetix/parser.py "parser") imports JSON file created by [acunetix_json_report_generator.py](https://github.com/code4innerpeace/DefectDojoAcunetixParsers/blob/master/AcunetixJsonReportGenerator/acunetix_json_report_generator.py "acunetix_json_report_generator.py") into DefectDojo.<span style="color:red">*Since Acunetix officially doesn't allow to export vulnerabilities in JSON format, I can't push Acunetix parser to 'DefectDojo' official repo. So I am sharing the code in my github repo.*</span>
 
+## Requirements
+[acunetix_json_report_generator.py](https://github.com/code4innerpeace/DefectDojoAcunetixParsers/blob/master/AcunetixJsonReportGenerator/acunetix_json_report_generator.py "acunetix_json_report_generator.py") :- Implemented and tested on Python 3.6
+
+[parser](https://github.com/code4innerpeace/DefectDojoAcunetixParsers/blob/master/DefectDojoAcunetixJsonParser/acunetix/parser.py "parser") :- Implemented and tested on Python 2.7 which is required by DefectDojo application.
+
+
 ## Steps to import Acunetix Scan Vulnerabilities into DefectDojo
 
 #### Create Acunetix JSON Report
