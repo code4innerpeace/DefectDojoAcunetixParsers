@@ -12,7 +12,7 @@ Acunetix is one of the leading 'Web Vulnerability Scanner' but as of today 'Defe
 
 ## Steps to import Acunetix Scan Vulnerabilities into DefectDojo
 
-#### Create Acunetix JSON Report
+#### Create Acunetix JSON Report( For XML, download vulnerabilities XML report from Acunetix Console. ) 
 
 1) git pull <https://github.com/code4innerpeace/DefectDojoAcunetixParsers>
 2) cd DefectDojoAcunetixParsers/AcunetixJsonReportGenerator
