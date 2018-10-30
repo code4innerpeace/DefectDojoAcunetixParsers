@@ -6,7 +6,7 @@ DefectDojo XML parser parses the Acunetix vulnerability scanner using 'lxml' pac
 
 DefectDojo Acunetix XML Parser had written based on Acunetix XML report generated as of 10/29/2018. In the future, Acunetix may change XML report format.
 
-##### Validate XML report downloaded by Acunetix Console by using 'validate_acunetix_scan_xml.py' utility script.
+##### Validate Acunetix Vulnerability XML report by using 'validate_acunetix_scan_xml.py' utility script.
 
 ```
 # Valid XML file which can be uploaded to DefectDojo.
