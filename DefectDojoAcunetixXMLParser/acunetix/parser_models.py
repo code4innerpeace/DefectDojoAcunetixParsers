@@ -34,19 +34,7 @@ class AcunetixScanReport:
         self.ReportItems = kwargs['ReportItems']
 
     def __str__(self):
-        print(self.Name)
-        print(self.ShortName)
-        print(self.StartURL)
-        print(self.StartTime)
-        print(self.FinishTime)
-        print(self.ScanTime)
-        print(self.Aborted)
-        print(self.Responsive)
-        print(self.Banner)
-        print(self.Os)
-        print(self.WebServer)
-        print(self.ReportItems)
-        return ""
+        return ', '.join(['{key}={value}'.format(key=key, value=self.__dict__.get(key)) for key in self.__dict__])
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
