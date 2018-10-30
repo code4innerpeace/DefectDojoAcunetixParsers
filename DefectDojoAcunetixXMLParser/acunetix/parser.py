@@ -41,8 +41,6 @@ class AcunetixScannerParser(object):
                             false_p=defectdojo_falsep,
                             dynamic_finding=acunetix_defectdojo_finding.dynamic_finding
                 )
-                print("===finding===")
-                print(finding)
                 defectdojo_findings.append(finding)
             else:
                 print("Duplicate finding : {defectdojo_title}".format(defectdojo_title=defectdojo_title))
