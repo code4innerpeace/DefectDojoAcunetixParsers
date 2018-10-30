@@ -32,7 +32,7 @@ python acunetix_json_report_generator.py -U <ACUNETIX_SERVER_URL> -A <ACUNETIX_A
 curl -k --request GET --url "<ACUNETIX_SERVER_URL>/api/v1/scans" --header "X-Auth: <ACUNETIX_API_TOKEN>" --header "Content-type: application/json" | jq .scans[].scan_id
 ```
 
-#### Implement the Acunetix JSON Parser in DefectDojo
+#### Implement the Acunetix JSON or XML Parser in DefectDojo
 
 1) Log onto DefectDojo server.
 2) git clone repo.
@@ -40,7 +40,15 @@ curl -k --request GET --url "<ACUNETIX_SERVER_URL>/api/v1/scans" --header "X-Aut
 cd /tmp
 git clone https://github.com/code4innerpeace/DefectDojoAcunetixParsers.git
 ```
-3) cd 'DefectDojo' repo and copy 'acunetix' folder 'tools' directory.
+3) cd 'DefectDojo' repo and copy 'acunetix' folder 'tools' directory. For JSON follow JSON parser steps and for XML follow XML parser steps.
+
+##### JSON Parser
+```
+cd DefectDojoAcunetixParsers/DefectDojoAcunetixXMLParser/
+cp -r acunetix <DefectDojoRepo>/django-DefectDojo/dojo/tools/
+```
+
+##### XML Parser
 ```
 cd DefectDojoAcunetixParsers/DefectDojoAcunetixJsonParser/
 cp -r acunetix <DefectDojoRepo>/django-DefectDojo/dojo/tools/
@@ -68,12 +76,21 @@ cp <DefectDojoRepo>/django-DefectDojo/dojo/forms.py <DefectDojoRepo>/django-Defe
 
 6) Add the new scanner to the [Template](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/templates/dojo/import_scan_results.html#L27 "import_scan_results.html").
 
+##### JSON Parser
 ```
 cd <DefectDojoRepo>/django-DefectDojo/dojo/templates/dojo
 cp import_scan_results.html import_scan_results.html.org
 
 # Add below line in 'Unordered List' block after line 28.
 <li><b>Acunetix Scanner</b> - JSON format.</li>
+```
+##### XML Parser
+```
+cd <DefectDojoRepo>/django-DefectDojo/dojo/templates/dojo
+cp import_scan_results.html import_scan_results.html.org
+
+# Add below line in 'Unordered List' block after line 28.
+<li><b>Acunetix Scanner</b> - XML format.</li>
 ```
 
 7) Add the new importer to the [test type](https://github.com/DefectDojo/django-DefectDojo/blob/master/dojo/fixtures/test_type.json "test_type.json") for new installations.<span style="color:red">*Make sure 'pk' value of the scanner is unique.*</span>
@@ -119,3 +136,99 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 407, in __get__
     self.related.get_accessor_name()
 RelatedObjectDoesNotExist: User has no usercontactinfo.
+
+<b>Issue 2:- When 'dynamic_finding' field in 'Finding' is set to 'True'. I am receiving below exception from Django code. I need to analyze further why this is happening. As of now 'dynamic_finding' had been set to 'False' in 'parser_models.py' file. </b>
+
+Internal Server Error: /engagement/88/import_scan_results
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 41, in inner
+
+    response = get_response(request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+
+    response = self._get_response(request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 187, in _get_response
+
+    response = self.process_exception_by_middleware(e, request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 185, in _get_response
+
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+
+    return view_func(request, *args, **kwargs)
+
+  File "/defectdojo/django-DefectDojo/dojo/engagement/views.py", line 555, in import_scan_results
+
+    item.save(dedupe_option=False)
+
+  File "/defectdojo/django-DefectDojo/dojo/models.py", line 1185, in save
+
+    self.hash_code = self.compute_hash_code()
+
+  File "/defectdojo/django-DefectDojo/dojo/models.py", line 1049, in compute_hash_code
+
+    for e in self.endpoints.all():
+
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 513, in __get__
+
+    return self.related_manager_cls(instance)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 830, in __init__
+
+    (instance, self.pk_field_names[self.source_field_name]))
+
+ValueError: "<Finding: VijayTest_VijayTest.com_CWE-56_/scoring/.DS_Store>" needs to have a value for field "id" before this many-to-many relationship can be used.
+
+Internal Server Error: /engagement/88/import_scan_results
+
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 41, in inner
+
+    response = get_response(request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+
+    response = self._get_response(request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 187, in _get_response
+
+    response = self.process_exception_by_middleware(e, request)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 185, in _get_response
+
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+
+    return view_func(request, *args, **kwargs)
+
+  File "/defectdojo/django-DefectDojo/dojo/engagement/views.py", line 555, in import_scan_results
+
+    item.save(dedupe_option=False)
+
+  File "/defectdojo/django-DefectDojo/dojo/models.py", line 1185, in save
+
+    self.hash_code = self.compute_hash_code()
+
+  File "/defectdojo/django-DefectDojo/dojo/models.py", line 1049, in compute_hash_code
+
+    for e in self.endpoints.all():
+
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 513, in __get__
+
+    return self.related_manager_cls(instance)
+
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related_descriptors.py", line 830, in __init__
+
+    (instance, self.pk_field_names[self.source_field_name]))
+
+ValueError: "<Finding: VijayTest_VijayTest.com_CWE-56_/scoring/.DS_Store>" needs to have a value for field "id" before this many-to-many relationship can be used.
+
+
