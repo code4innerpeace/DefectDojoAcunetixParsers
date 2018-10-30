@@ -1,4 +1,4 @@
-# DefectDojo Acunetix Parser
+# DefectDojo Acunetix Parsers
 
 [DefectDojo](https://github.com/DefectDojo "Github Repo") is an open source vulnerability management tool. 'DefectDojo' parser utility allows to import XML or JSON vulnerabilities report into 'DefectDojo' application. List of 'Parsers' supported by 'DefectDojo' can be found at <https://github.com/DefectDojo/django-DefectDojo/tree/master/dojo/tools>.
 
@@ -12,7 +12,7 @@ Acunetix is one of the leading 'Web Vulnerability Scanner' but as of today 'Defe
 
 ## Steps to import Acunetix Scan Vulnerabilities into DefectDojo
 
-#### Create Acunetix JSON Report( For XML, download vulnerabilities XML report from Acunetix Console. ) 
+#### Create Acunetix JSON Report( For XML, download vulnerabilities XML report from Acunetix Console. )
 
 1) git pull <https://github.com/code4innerpeace/DefectDojoAcunetixParsers>
 2) cd DefectDojoAcunetixParsers/AcunetixJsonReportGenerator
